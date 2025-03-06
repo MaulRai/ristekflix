@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TopMoviesSection extends StatelessWidget {
+class SpecialSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
