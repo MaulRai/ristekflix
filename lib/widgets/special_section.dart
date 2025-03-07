@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SpecialSection extends StatelessWidget {
+  final String title;
+  final String apiUrl;
+
+  SpecialSection({required this.title, required this.apiUrl});
+
+  Future<List<dynamic>> fetchMovies() async {
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['results'];
+    } else {
+      throw Exception('Failed to load $title');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -10,7 +28,7 @@ class SpecialSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            "Top 5 Movies",
+            title,
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -18,36 +36,48 @@ class SpecialSection extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10), // Space between title and list
+        SizedBox(height: 10),
 
-        // Horizontal List
         SizedBox(
-          height: 200, // Adjusted height for 3:4 aspect ratio posters
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5, // 5 placeholder posters
-            itemBuilder: (context, index) {
-              return Container(
-                width: 150, // 3:4 Aspect Ratio (150 width, 200 height)
-                margin: EdgeInsets.only(left: index == 0 ? 16 : 8, right: index == 4 ? 16 : 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[800], // Placeholder color
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 5,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                    "Movie ${index + 1}",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              );
+          height: 200,
+          child: FutureBuilder<List<dynamic>>(
+            future: fetchMovies(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Failed to load $title"));
+              } else {
+                final movies = snapshot.data!;
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: movies.length,
+                  itemBuilder: (context, index) {
+                    final movie = movies[index];
+                    return Container(
+                      width: 150,
+                      margin: EdgeInsets.only(left: index == 0 ? 16 : 8, right: index == movies.length - 1 ? 16 : 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(10),
+                        image: movie['poster_path'] != null
+                            ? DecorationImage(
+                                image: NetworkImage("https://image.tmdb.org/t/p/w500${movie['poster_path']}"),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 5,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }
             },
           ),
         ),
