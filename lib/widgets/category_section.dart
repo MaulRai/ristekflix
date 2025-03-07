@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ristekflix/screens/detail_screen.dart';
 
-const String apiKey = 'a8fe2c893a6c51ef87d21f2c7bc02a26'; // Replace with your TMDb API Key
+const String apiKey =
+    'a8fe2c893a6c51ef87d21f2c7bc02a26'; // Replace with your TMDb API Key
 
 class CategorySection extends StatefulWidget {
   @override
@@ -77,7 +79,8 @@ class _CategoryCarouselState extends State<CategoryCarousel> {
     } else if (widget.category == "tv") {
       url = 'https://api.themoviedb.org/3/trending/tv/week?api_key=$apiKey';
     } else if (widget.category == "anime") {
-      url = 'https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=16'; // 16 is the genre ID for Animation
+      url =
+          'https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=16'; // 16 is the genre ID for Animation
     }
 
     final response = await http.get(Uri.parse(url));
@@ -118,50 +121,61 @@ class _CategoryCarouselState extends State<CategoryCarousel> {
                       ? 'https://image.tmdb.org/t/p/w500${items[index]['poster_path']}'
                       : 'https://via.placeholder.com/500x750';
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeOut,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[800],
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: isCurrent
-                                ? Colors.white.withOpacity(0.4)
-                                : Colors.black.withOpacity(0.5),
-                            blurRadius: isCurrent ? 12 : 6,
-                            spreadRadius: isCurrent ? 3 : 1,
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            Image.network(imageUrl, fit: BoxFit.cover),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                color: Colors.black.withOpacity(0.7),
-                                child: Text(
-                                  items[index]['title'] ??
-                                      items[index]['name'] ??
-                                      "Unknown",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: isCurrent ? 18 : 14,
-                                    fontWeight: FontWeight.bold,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailScreen(movie: items[index]),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: isCurrent
+                                  ? Colors.white.withOpacity(0.4)
+                                  : Colors.black.withOpacity(0.5),
+                              blurRadius: isCurrent ? 12 : 6,
+                              spreadRadius: isCurrent ? 3 : 1,
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.network(imageUrl, fit: BoxFit.cover),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  color: Colors.black.withOpacity(0.7),
+                                  child: Text(
+                                    items[index]['title'] ??
+                                        items[index]['name'] ??
+                                        "Unknown",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: isCurrent ? 18 : 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

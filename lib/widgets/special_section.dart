@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:ristekflix/screens/detail_screen.dart';
+
 class SpecialSection extends StatelessWidget {
   final String title;
   final String apiUrl;
@@ -54,25 +56,39 @@ class SpecialSection extends StatelessWidget {
                   itemCount: movies.length,
                   itemBuilder: (context, index) {
                     final movie = movies[index];
-                    return Container(
-                      width: 150,
-                      margin: EdgeInsets.only(left: index == 0 ? 16 : 8, right: index == movies.length - 1 ? 16 : 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[800],
-                        borderRadius: BorderRadius.circular(10),
-                        image: movie['poster_path'] != null
-                            ? DecorationImage(
-                                image: NetworkImage("https://image.tmdb.org/t/p/w500${movie['poster_path']}"),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 5,
-                            spreadRadius: 2,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailScreen(movie: movie),
                           ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        width: 150,
+                        margin: EdgeInsets.only(
+                            left: index == 0 ? 16 : 8,
+                            right: index == movies.length - 1 ? 16 : 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(10),
+                          image: movie['poster_path'] != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                      "https://image.tmdb.org/t/p/w500${movie['poster_path']}"),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 5,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

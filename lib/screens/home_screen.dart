@@ -12,13 +12,11 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Color(0xFF5038BC),
       body: SafeArea(
         child: SingleChildScrollView(
-          // Enables vertical scrolling
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopBar(),
 
-              // Limit CategorySection height instead of using Expanded
               SizedBox(
                 height: 300,
                 child: CategorySection(),
