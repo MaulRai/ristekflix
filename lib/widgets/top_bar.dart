@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ristekflix/helpers/user_things.dart';
 import 'package:ristekflix/widgets/accessories/home_profile.dart';
 import 'package:ristekflix/widgets/buttons/notification_button.dart';
 
@@ -25,7 +26,7 @@ class TopBar extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Tabby",
+                    getUsernameFromEmail(),
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
