@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ristekflix/authentication/auth.dart';
-import 'package:ristekflix/screens/home_screen.dart';
 import 'package:ristekflix/screens/login_register_screen.dart';
+import 'package:ristekflix/screens/main_screen.dart';
 
 class AuthStream extends StatefulWidget {
   const AuthStream({super.key});
@@ -17,7 +17,7 @@ class _AuthStreamState extends State<AuthStream> {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return HomeScreen();
+          return MainScreen();
         } else {
           return const LoginRegisterScreen();
         }

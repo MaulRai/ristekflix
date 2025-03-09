@@ -35,7 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final userData = await FirestoreService().getUserData();
     if (userData != null) {
       setState(() {
-        debugPrint("<<<DEBUG>>> ${userData["username"]}");
         _usernameController.text =
             userData["username"] ?? getUsernameFromEmail();
         _selectedGenres = List<String>.from(userData["preferredGenres"] ?? []);
