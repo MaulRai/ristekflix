@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "560563192255",
+    "project_id": "ristekflix",
+    "storage_bucket": "ristekflix.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560563192255:android:674c5f456cb184fc81a10a",
+        "android_client_info": {
+          "package_name": "com.example.ristekflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAV-eopA2IlclChZuMXhBqT1OETAfLoT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
