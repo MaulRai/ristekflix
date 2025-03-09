@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "D:/Android-Studio/Projects/ristekflix/windows/flutter"
+    "cmake.sourceDirectory": "D:/Android-Studio/Projects/ristekflix/windows/flutter",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
