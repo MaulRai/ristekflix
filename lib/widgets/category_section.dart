@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:ristekflix/repository/movie_repository.dart';
 import 'package:ristekflix/screens/detail_screen.dart';
 
 const String apiKey =
@@ -15,6 +14,7 @@ class CategorySection extends StatefulWidget {
 class _CategorySectionState extends State<CategorySection>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  
 
   @override
   void initState() {
@@ -24,31 +24,34 @@ class _CategorySectionState extends State<CategorySection>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.grey,
-          tabs: [
-            Tab(text: "Movies"),
-            Tab(text: "TV Shows"),
-            Tab(text: "Animation"),
-          ],
-        ),
-        Expanded(
-          child: TabBarView(
+    return SizedBox(
+      height: 300,
+      child: Column(
+        children: [
+          TabBar(
             controller: _tabController,
-            children: [
-              CategoryCarousel(category: "movies"),
-              CategoryCarousel(category: "tv"),
-              CategoryCarousel(category: "anime"),
+            isScrollable: true,
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey,
+            tabs: [
+              Tab(text: "Movies"),
+              Tab(text: "TV Shows"),
+              Tab(text: "Animation"),
             ],
           ),
-        ),
-      ],
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                CategoryCarousel(category: "movies"),
+                CategoryCarousel(category: "tv"),
+                CategoryCarousel(category: "anime"),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -64,6 +67,8 @@ class CategoryCarousel extends StatefulWidget {
 class _CategoryCarouselState extends State<CategoryCarousel> {
   int _currentIndex = 0;
   List<dynamic> items = [];
+  final MovieRepository movieRepository = MovieRepository();
+
 
   @override
   void initState() {
@@ -72,27 +77,10 @@ class _CategoryCarouselState extends State<CategoryCarousel> {
   }
 
   Future<void> fetchCategoryData() async {
-    String url = '';
-
-    if (widget.category == "movies") {
-      url = 'https://api.themoviedb.org/3/trending/movie/week?api_key=$apiKey';
-    } else if (widget.category == "tv") {
-      url = 'https://api.themoviedb.org/3/trending/tv/week?api_key=$apiKey';
-    } else if (widget.category == "anime") {
-      url =
-          'https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=16'; // 16 is the genre ID for Animation
-    }
-
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final data = await movieRepository.fetchCategoryData(widget.category);
       setState(() {
         items = data['results'];
       });
-    } else {
-      throw Exception("Failed to load data");
-    }
   }
 
   @override

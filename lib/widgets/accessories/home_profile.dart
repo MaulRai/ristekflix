@@ -16,7 +16,7 @@ class HomeProfile extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
         width: 60, // Adjust size for border
         height: 60,
         decoration: BoxDecoration(

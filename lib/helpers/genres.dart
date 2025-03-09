@@ -27,3 +27,7 @@ final Map<int, String> genreMap = {
   10767: "Talk",
   10768: "War & Politics"
 };
+
+final Map<String, int> genreNums = {
+  for (var entry in genreMap.entries) entry.value: entry.key
+};

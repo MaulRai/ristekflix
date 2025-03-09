@@ -1,32 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:ristekflix/repository/movie_repository.dart';
 
 import 'package:ristekflix/screens/detail_screen.dart';
 
 class SpecialSection extends StatelessWidget {
   final String title;
   final String apiUrl;
+  final MovieRepository movieRepository = MovieRepository();
 
   SpecialSection({required this.title, required this.apiUrl});
-
-  Future<List<dynamic>> fetchMovies() async {
-    final response = await http.get(Uri.parse(apiUrl));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data['results'];
-    } else {
-      throw Exception('Failed to load $title');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
@@ -36,6 +24,7 @@ class SpecialSection extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
+            softWrap: true,
           ),
         ),
         SizedBox(height: 10),
@@ -43,7 +32,7 @@ class SpecialSection extends StatelessWidget {
         SizedBox(
           height: 200,
           child: FutureBuilder<List<dynamic>>(
-            future: fetchMovies(),
+            future: movieRepository.fetchMovies(apiUrl),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
