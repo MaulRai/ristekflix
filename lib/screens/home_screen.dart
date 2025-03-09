@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ristekflix/helpers/genres.dart';
+import 'package:ristekflix/helpers/user_things.dart';
 import 'package:ristekflix/services/firestore_service.dart';
 import 'package:ristekflix/widgets/category_section.dart';
 import 'package:ristekflix/widgets/special_section.dart';
@@ -60,13 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               TopBar(),
               CategorySection(),
-              SizedBox(height: 20),
-              if (preferredGenres.isNotEmpty)
+              if (preferredGenres.isNotEmpty) ...[
+                SizedBox(height: 20),
                 SpecialSection(
                   title: "Based on your favorite genre: $chosenGenre",
                   apiUrl:
                       "https://api.themoviedb.org/3/discover/movie?api_key=$apiKey&with_genres=$chosenGenreNum",
                 ),
+              ],
               SizedBox(height: 20),
               SpecialSection(
                 title: "Top Rated",

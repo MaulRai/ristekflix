@@ -22,7 +22,7 @@ class CredentialField extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           controller: tec,
-          obscureText: label == "Password",
+          obscureText: label == "Password" || label == "Confirm Password",
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
