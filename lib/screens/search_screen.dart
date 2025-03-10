@@ -66,12 +66,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                          color:
-                              Colors.grey), // Grey underline when not focused
+                          color: Colors
+                              .grey), // Grey underline when not focused
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
-                          color: Colors.white), // White underline when focused
+                          color:
+                              Colors.white), // White underline when focused
                     ),
                   ),
                   style: TextStyle(color: Colors.white, fontSize: 18),

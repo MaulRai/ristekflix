@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ristekflix/screens/about_screen.dart';
 import 'package:ristekflix/screens/home_screen.dart';
 import 'package:ristekflix/screens/profile_screen.dart';
 import 'package:ristekflix/screens/search_screen.dart';
@@ -17,6 +18,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     SearchScreen(),
     ProfileScreen(),
+    AboutScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -57,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
             backgroundColor: Colors.white,
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Color(0xFF5038BC),
-            unselectedItemColor: Colors.grey.shade400,
+            unselectedItemColor: Colors.grey.shade600,
             showUnselectedLabels: true,
             elevation: 0,
             items: [
@@ -84,6 +86,14 @@ class _MainScreenState extends State<MainScreen> {
                   color: Color(0xFF5038BC),
                 ),
                 label: 'Profile',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.info_outline,
+                  size: 28,
+                  color: Color(0xFF5038BC),
+                ),
+                label: 'About',
               ),
             ],
           ),
