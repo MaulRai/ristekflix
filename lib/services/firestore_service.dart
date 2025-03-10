@@ -6,11 +6,10 @@ class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> saveUserData(
-      String username, List<String> genres) async {
+  Future<void> saveUserData(String username, List<String> genres) async {
     final user = _auth.currentUser;
     if (user != null) {
-     await _db.collection("users").doc(user.uid).set({
+      await _db.collection("users").doc(user.uid).set({
         "username": username,
         "preferredGenres": genres,
       }, SetOptions(merge: true));
@@ -18,16 +17,15 @@ class FirestoreService {
   }
 
   Future<Map<String, dynamic>?> getUserData() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      try {
-        DocumentSnapshot doc = await _db.collection("users").doc(user.uid).get();
-        return doc.exists ? doc.data() as Map<String, dynamic> : null;
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null; // Prevent fetching data if logged out
+
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    return doc.data() as Map<String, dynamic>?;
   }
 
   Stream<String> getUsernameStream() {
@@ -48,8 +46,10 @@ class FirestoreService {
     final user = _auth.currentUser;
     if (user != null) {
       return _db.collection("users").doc(user.uid).snapshots().map(
-        (snapshot) => snapshot.exists ? snapshot.data() as Map<String, dynamic> : null,
-      );
+            (snapshot) => snapshot.exists
+                ? snapshot.data() as Map<String, dynamic>
+                : null,
+          );
     }
     return Stream.value(null);
   }

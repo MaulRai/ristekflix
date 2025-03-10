@@ -16,7 +16,6 @@ class _CategoryCarouselState extends State<CategoryCarousel> {
   List<dynamic> items = [];
   final MovieRepository movieRepository = MovieRepository();
 
-
   @override
   void initState() {
     super.initState();
@@ -24,10 +23,24 @@ class _CategoryCarouselState extends State<CategoryCarousel> {
   }
 
   Future<void> fetchCategoryData() async {
+    try {
       final data = await movieRepository.fetchCategoryData(widget.category);
-      setState(() {
-        items = data['results'];
-      });
+
+      if (mounted) {
+        // ✅ Check if widget is still mounted before calling setState()
+        setState(() {
+          items = data['results'];
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        // ✅ Check again in case of error handling
+        setState(() {
+          items = [];
+        });
+      }
+      print("Error fetching category data: $e");
+    }
   }
 
   @override

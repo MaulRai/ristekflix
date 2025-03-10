@@ -1,5 +1,10 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ristekflix/authentication/auth.dart';
 import 'package:ristekflix/helpers/user_things.dart';
+import 'package:ristekflix/screens/login_register_screen.dart';
 import 'package:ristekflix/services/firestore_service.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -11,6 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _usernameController = TextEditingController();
   List<String> _selectedGenres = [];
   bool _isLoading = false;
+  StreamSubscription? _userSubscription;
 
   final List<String> genres = [
     "Action",
@@ -31,15 +37,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _fetchUserData();
   }
 
-  Future<void> _fetchUserData() async {
-    final userData = await FirestoreService().getUserData();
-    if (userData != null) {
-      setState(() {
-        _usernameController.text =
-            userData["username"] ?? getUsernameFromEmail();
-        _selectedGenres = List<String>.from(userData["preferredGenres"] ?? []);
-      });
-    }
+  void _fetchUserData() {
+    _userSubscription =
+        FirestoreService().getUserDataStream().listen((userData) {
+      if (mounted) {
+        setState(() {
+          _usernameController.text =
+              userData?["username"] ?? getUsernameFromEmail();
+          _selectedGenres =
+              List<String>.from(userData?["preferredGenres"] ?? []);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _userSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _saveProfile() async {
@@ -63,6 +78,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  void _logout() async {
+    try {
+      // Cancel all Firestore subscriptions if any
+      _userSubscription?.cancel();
+
+      // Sign out user from Firebase
+      await FirebaseAuth.instance.signOut();
+
+      // Close all pages and navigate to Login/Register Screen
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginRegisterScreen()),
+          (route) => false, // Remove all previous routes
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Logout failed: ${e.toString()}")),
+        );
+      }
     }
   }
 
@@ -132,6 +171,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(color: Colors.white)),
                     ),
                   ),
+                  Spacer(), // Pushes the logout button to the bottom
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _logout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child:
+                          Text("Logout", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
