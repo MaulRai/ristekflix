@@ -3,8 +3,6 @@ import 'package:ristekflix/helpers/user_things.dart';
 import 'package:ristekflix/services/firestore_service.dart';
 import 'package:ristekflix/widgets/accessories/home_profile.dart';
 import 'package:ristekflix/widgets/buttons/notification_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({super.key});

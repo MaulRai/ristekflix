@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ristekflix/authentication/auth.dart';
 import 'package:ristekflix/authentication/auth_stream.dart';
-import 'package:ristekflix/screens/home_screen.dart';
 import 'package:ristekflix/widgets/buttons/custom_button.dart';
 import 'package:ristekflix/widgets/credential_field.dart';
 

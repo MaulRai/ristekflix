@@ -1,7 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:ristekflix/repository/movie_repository.dart';
-import 'package:ristekflix/screens/detail_screen.dart';
 import 'package:ristekflix/widgets/category_carousel.dart';
 
 class CategorySection extends StatefulWidget {

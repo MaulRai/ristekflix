@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ristekflix/authentication/auth.dart';
 import 'package:ristekflix/helpers/user_things.dart';
 import 'package:ristekflix/screens/login_register_screen.dart';
 import 'package:ristekflix/services/firestore_service.dart';
